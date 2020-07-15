@@ -1,0 +1,89 @@
+<!-- verbinden mit der Base.html Seite -->
+{% extends 'base.html' %} {% block body %}
+
+<style>
+  /* style für HTML Seite */
+
+  #img {
+    width: 30%;
+    float: left;
+    margin: 1.66%;
+
+    /* border: 1px solid; */
+  }
+  #color {
+    width: 100%;
+    height: 30vw;
+    background-color: rgb(214, 214, 214);
+  }
+  #color:hover {
+    border: 5px solid white;
+  }
+</style>
+
+<body>
+  <!-- Sucheleiste mit placeholder: joy - anger - anxiety - trust - surprise - grief - fear - love-->
+  <div class="row">
+    <div class="col-lg-6 m-4">
+      <form action="/emotions" method="POST" class="form-group">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control rounded-0"
+            placeholder="Emotionen suchen: joy - anger - anxiety - trust - surprise - grief - fear - love"
+            id="searchInput"
+            name="searchInput"
+          />
+          <span class="input-group-btn bg-danger">
+            <!-- Such-button der die POST route bei der gleichen Seite auslöst.. um dann die Divs mit den Farben zu laden -->
+            <button class="btn btn-default text-light" type="submit">
+              search
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- für jede Farbe in der erhalten Liste ein DIV laden, mit der jeweils übergebenen Farbe als Hintergrund -->
+  {% for color in colors%}
+  <div id="img">
+    <div
+      id="color"
+      style="background-color: {{ color }}"
+      onclick="copy('{{ color }}')"
+    ></div>
+    <!-- <center> -->
+    <p>{{ color }}</p>
+    <!-- </center> -->
+  </div>
+  <!-- Ende der For-Schleife -->
+  {% endfor %}
+
+  <script>
+    function copy(colorName) {
+      // create hidden element
+      var area = document.createElement('textarea')
+      // set value to created element
+      area.value = colorName
+      document.body.appendChild(area)
+      // Text innerhalb des Elements auswählen
+      area.select()
+      // copy to clipboard
+      document.execCommand('copy')
+      // delete element
+      document.body.removeChild(area)
+
+      // use function from external sweetalert functions (importet at bottom of body)
+      Swal.fire({
+        icon: 'success',
+        title: colorName,
+        text: 'copied Color successfully to cliboard!',
+        footer: '<a href>Thanks for using my first #App - Julie</a>',
+      })
+    }
+  </script>
+
+  <!-- schöne Alertboxen einbinden -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+</body>
+{% endblock %}
